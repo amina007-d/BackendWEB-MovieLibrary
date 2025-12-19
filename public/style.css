@@ -145,3 +145,18 @@ button:hover {
     gap: 12px;
   }
 }
+
+/* ===== TEXT ALIGN FIX ===== */
+section p {
+  margin-top: 10px;
+  line-height: 1.6;
+}
+
+section ul {
+  margin-left: 20px;
+}
+
+/* ===== REMOVE DEFAULT NAV ===== */
+nav:not(.navbar) {
+  display: none;
+}
