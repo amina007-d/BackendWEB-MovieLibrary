@@ -9,3 +9,6 @@ res.sendFile(__dirname + '/views/index.html');
 });
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
+});
