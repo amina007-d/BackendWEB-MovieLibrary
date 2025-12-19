@@ -42,6 +42,53 @@ Open the app in your browser:
 http://localhost:3000
 ```
 
+## Available Routes
+
+The application currently supports the following routes:
+
+- GET /  
+  Displays the Home page (landing page of the Movie Library project).
+
+- GET /about  
+  Displays the About page with team and project information.
+
+- GET /contact  
+  Displays the Contact page with a form for user messages.
+
+- POST /contact  
+  Handles the contact form submission and returns a confirmation message to the user.
+
+- 404 Page  
+  Any undefined route will display a custom 404 – Page Not Found page.
+
+---
+
+## Contact Form Details
+
+The Contact page contains a form that allows users to send a message to the server.
+
+### Form Fields
+- Name (text input)
+- Email (email input)
+- Message (textarea)
+
+### Form Behavior
+- Uses the POST method  
+- Sends data to /contact  
+- Client-side validation using HTML required attributes  
+- After submission, the user receives a styled confirmation message  
+
+This feature demonstrates basic form handling in Express.js using the express.urlencoded() middleware.
+
+---
+
+## How to Run the Project
+
+Install dependencies:
+
+```bash
+npm install
+
 ## Roadmap (According to Course Syllabus)
 
 ### Week 1 — Project Setup & Introduction
