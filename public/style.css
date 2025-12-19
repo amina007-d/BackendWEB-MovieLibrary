@@ -103,22 +103,6 @@ body {
   color: #000;
 }
 
-nav {
-  border-bottom: 1px solid #000;
-  padding: 15px;
-}
-
-nav a {
-  margin-right: 20px;
-  text-decoration: none;
-  color: #000;
-  font-weight: bold;
-}
-
-nav a:hover {
-  text-decoration: underline;
-}
-
 .container {
   max-width: 600px;
   margin: 60px auto;
@@ -202,3 +186,18 @@ button:hover {
   background: #174a5c;
 }
 
+body.page {
+  min-height: 100vh;
+  margin: 0;
+  background: #f3f5f7;
+}
+
+.navbar {
+  display: flex;
+  gap: 20px;
+  padding: 20px 40px;
+}
+
+.card {
+  margin: 80px auto 0;
+}
