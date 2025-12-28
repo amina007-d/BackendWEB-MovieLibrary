@@ -5,6 +5,12 @@ const fs = require('fs');
 const app = express();
 const PORT = 3000;
 
+// Nazerke's part "Custom logger middleware (HTTP method + URL)"
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
