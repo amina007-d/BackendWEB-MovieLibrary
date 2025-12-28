@@ -20,6 +20,18 @@ app.get('/contact', (req, res) => {
   res.sendFile(path.join(__dirname, 'views/contact.html'));
 });
 
+// Amina's part "returns project information in JSON format"
+app.get('/api/info', (req, res) => {
+  fs.readFile('project-info.json', 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to load project info' });
+    }
+
+    res.json(JSON.parse(data));
+  });
+});
+
+
 app.post('/contact', (req, res) => {
   const data = {
     name: req.body.name,

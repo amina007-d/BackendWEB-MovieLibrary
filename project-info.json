@@ -1,0 +1,34 @@
+{
+  "projectName": "Movie Library",
+  "description": "A simple web application for organizing, tracking, and discovering movies.",
+  "features": [
+    "Add movies",
+    "Browse personal movie collection",
+    "Search and filter movies",
+    "Track watched movies",
+    "Plan what to watch next"
+  ],
+  "team": [
+    {
+      "name": "Amina Dossan",
+      "group": "Group-2422"
+    },
+    {
+      "name": "Yerassyl Alimbek",
+      "group": "Group-2422"
+    },
+    {
+      "name": "Nazerke Abdizhamal",
+      "group": "Group-2422"
+    },
+    {
+      "name": "Almat Zhamsat",
+      "group": "Group-2422"
+    }
+  ],
+  "technology": [
+    "Node.js",
+    "Express.js"
+  ],
+  "status": "In development"
+}
