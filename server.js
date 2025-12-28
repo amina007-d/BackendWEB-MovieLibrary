@@ -56,6 +56,24 @@ app.post('/contact', (req, res) => {
   });
 });
 
+//Almat
+app.get('/item/:id', (req, res) => {
+  const itemId = req.params.id;
+
+  // Checking validation
+  if (!itemId || isNaN(itemId)) {
+    return res.status(400).send('<h2>400 - Invalid item ID</h2>');
+  }
+
+  res.send(`
+    <h1>Item Page</h1>
+    <p>You requested item with ID: <strong>${itemId}</strong></p>
+    <a href="/">Go back home</a>
+  `);
+});
+
+
+
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, 'views/404.html'));
 });
