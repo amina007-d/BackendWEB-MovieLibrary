@@ -82,6 +82,40 @@ This feature demonstrates basic form handling in Express.js using the express.ur
 
 ---
 
+---
+## Assignment 2 – Part 1: Implemented Features (Weeks 3–4)
+
+As part of **Assignment 2 – Part 1**, the following server-side request handling features were implemented using **Express.js**:
+
+### Middleware
+
+- **express.urlencoded({ extended: true })**  
+  Used to parse form data sent via POST requests.
+
+- **Custom Logger Middleware**  
+  Logs each incoming request’s HTTP method and URL to the console.
+
+### Routes
+
+- **GET /**  
+  Home page with navigation links to other pages.
+
+- **GET /search?q=**  
+  Demonstrates usage of **query parameters**.  
+  Returns a response based on the provided search query.
+
+- **GET /item/:id**  
+  Demonstrates usage of **route parameters**.  
+  Displays information based on the item ID.
+
+- **POST /contact**  
+  Handles form submission from the Contact page and saves user messages to a JSON file on the server.
+
+- **GET /api/info**  
+  Returns project information in **JSON format** by reading data from a separate JSON file (`project-info.json`).
+
+---
+
 ## How to Run the Project
 
 Install dependencies:
