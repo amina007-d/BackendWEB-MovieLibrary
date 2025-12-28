@@ -73,6 +73,23 @@ app.get('/item/:id', (req, res) => {
 });
 
 
+// Yerassyl's part "Search route using query parameter"
+app.get('/search', (req, res) => {
+  const q = req.query.q;
+
+  // validation
+  if (!q) {
+    return res.status(400).send('<h2>400 - Search query missing</h2><p>Use /search?q=movieName</p>');
+  }
+
+  res.send(`
+    <h1>Search Results</h1>
+    <p>You searched for: <strong>${q}</strong></p>
+    <a href="/">Back to Home</a>
+  `);
+});
+
+
 
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, 'views/404.html'));
