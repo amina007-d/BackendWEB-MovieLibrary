@@ -83,7 +83,7 @@ This feature demonstrates basic form handling in Express.js using the express.ur
 ---
 
 ---
-## Assignment 2 – Part 1: Implemented Features (Weeks 3–4)
+## Assignment 2 - Part 1: Implemented Features (Weeks 3–4)
 
 As part of **Assignment 2 – Part 1**, the following server-side request handling features were implemented using **Express.js**:
 
