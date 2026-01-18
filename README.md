@@ -1,205 +1,290 @@
-# Movie Library
+# Movie Library API - Assignment 3 Part 1
 
-A simple web application for organizing, tracking, and discovering movies. Users will be able to add films, browse their personal collection, and plan what to watch next.
+A backend API built with Node.js, Express, and MongoDB for managing a movie collection.
 
 ## Team Members
+- **Amina Dossan** – GET routes, filtering, and queries
+- **Yerassyl Alimbek** – POST route and validation
+- **Nazerke Abdizhamal** – PUT route and custom middleware
+- **Almat Zhamsat** – DELETE route and error handling
 
-- Amina Dossan — Group-2422
-- Yerassyl Alimbek — Group-2422
-- Nazerke Abdizhamal — Group-2422
-- Almat Zhamsat — Group-2422
+## Technologies
+- Node.js
+- Express.js
+- MongoDB (native driver)
 
-## Project Topic Explanation
+## Setup Instructions
 
-Movie Library is a basic web application built with Node.js and Express.js that allows users to create their own movie collection. The goal of this app is to let users store movie information (title, genre, rating, year), save favorite movies, search and filter through the library, and track what they have already watched.
+### 1. Install MongoDB
+Download and install MongoDB Community Server from: https://www.mongodb.com/try/download/community
 
-This project will gradually expand each week following the course structure.
+### 2. Start MongoDB
+```bash
+# On Windows
+"C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath="C:\data\db"
 
-## Installation & Run Instructions
+# On macOS (with Homebrew)
+brew services start mongodb-community
 
-Clone the repository:
-
-``` bash
-git clone https://github.com/amina007-d/BackendWEB-MovieLibrary.git
-```
-Navigate into the project folder:
-
-``` bash
-cd MovieLibrary
-```
-Install dependencies:
-
-``` bash
-npm install
-```
-Start the Express server:
-``` bash
-node server.js
-``` 
-
-Open the app in your browser:
-``` bash
-http://localhost:3000
+# On Linux
+sudo systemctl start mongod
 ```
 
-## Available Routes
-
-The application currently supports the following routes:
-
-- GET /  
-  Displays the Home page (landing page of the Movie Library project).
-
-- GET /about  
-  Displays the About page with team and project information.
-
-- GET /contact  
-  Displays the Contact page with a form for user messages.
-
-- POST /contact  
-  Handles the contact form submission and returns a confirmation message to the user.
-
-- 404 Page  
-  Any undefined route will display a custom 404 – Page Not Found page.
-
----
-
-## Contact Form Details
-
-The Contact page contains a form that allows users to send a message to the server.
-
-### Form Fields
-- Name (text input)
-- Email (email input)
-- Message (textarea)
-
-### Form Behavior
-- Uses the POST method  
-- Sends data to /contact  
-- Client-side validation using HTML required attributes  
-- After submission, the user receives a styled confirmation message  
-
-This feature demonstrates basic form handling in Express.js using the express.urlencoded() middleware.
-
----
-
----
-## Assignment 2 - Part 1: Implemented Features (Weeks 3–4)
-
-As part of **Assignment 2 – Part 1**, the following server-side request handling features were implemented using **Express.js**:
-
-### Middleware
-
-- **express.urlencoded({ extended: true })**  
-  Used to parse form data sent via POST requests.
-
-- **Custom Logger Middleware**  
-  Logs each incoming request’s HTTP method and URL to the console.
-
-### Routes
-
-- **GET /**  
-  Home page with navigation links to other pages.
-
-- **GET /search?q=**  
-  Demonstrates usage of **query parameters**.  
-  Returns a response based on the provided search query.
-
-- **GET /item/:id**  
-  Demonstrates usage of **route parameters**.  
-  Displays information based on the item ID.
-
-- **POST /contact**  
-  Handles form submission from the Contact page and saves user messages to a JSON file on the server.
-
-- **GET /api/info**  
-  Returns project information in **JSON format** by reading data from a separate JSON file (`project-info.json`).
-
----
-
-## How to Run the Project
-
-Install dependencies:
-
+### 3. Install Dependencies
 ```bash
 npm install
+```
 
-## Roadmap (According to Course Syllabus)
+### 4. Start the Server
+```bash
+npm start
+```
 
-### Week 1 — Project Setup & Introduction
+Server will run on: http://localhost:3000
 
-- Introduction to Web Technologies 2 course
-- Set up study environment & editors
-- Create project folders (public/, views/)
-- Build landing page and basic Express server
-- Commit to GitHub
+## API Documentation
 
-### Week 2 — Backend Basics with Express
+### Base URL
+```
+http://localhost:3000/api/movies
+```
 
-- Introduction to backend development
-- Learn Express.js basics
-- Understand components of backend architecture
-- Introduction to MVC concept
-- Add new routes/pages in your Movie Library (e.g., /add, /list)
+### Endpoints
 
-### Week 3 — Server-Side Logic
+#### 1. GET /api/movies
+Get all movies with optional filtering, sorting, and projection.
 
-- Handling HTTP requests and responses
-- Working with POST forms
-- Implement "Add Movie" form → save submitted data temporarily (array/in-memory)
-- Display the list of movies on /movies
+**Query Parameters:**
+- `genre` - Filter by genre (e.g., `?genre=Action`)
+- `year` - Filter by year (e.g., `?year=2023`)
+- `title` - Search by title (case-insensitive, e.g., `?title=inception`)
+- `sortBy` - Sort by field (e.g., `?sortBy=year`)
+- `order` - Sort order: `asc` or `desc` (e.g., `?order=desc`)
+- `fields` - Select specific fields (e.g., `?fields=title,year`)
 
-### Week 4 — Working With APIs
+**Examples:**
+```
+GET /api/movies
+GET /api/movies?genre=Action
+GET /api/movies?year=2023&sortBy=rating&order=desc
+GET /api/movies?fields=title,year,rating
+```
 
-- Understand what APIs are and how they work
-- Fetch external API data (e.g., OMDb API for movies)
-- Work with JSON responses
-- Optional: add "Search Movie" using an external movie API
+**Response (200 OK):**
+```json
+{
+  "count": 2,
+  "data": [
+    {
+      "_id": "507f1f77bcf86cd799439011",
+      "title": "Inception",
+      "genre": "Sci-Fi",
+      "year": 2010,
+      "rating": 8.8,
+      "director": "Christopher Nolan",
+      "description": "A mind-bending thriller"
+    }
+  ]
+}
+```
 
-### Week 5 — SQL Databases
+#### 2. GET /api/movies/:id
+Get a single movie by ID.
 
-- Database fundamentals
-- Entity Relationship Modeling (ERM)
-- Implement CRUD operations (Create, Read, Update, Delete)
-- Connect your project to SQL (PostgreSQL recommended)
-- Store movies in the database instead of arrays
+**Response (200 OK):**
+```json
+{
+  "_id": "507f1f77bcf86cd799439011",
+  "title": "Inception",
+  "genre": "Sci-Fi",
+  "year": 2010,
+  "rating": 8.8
+}
+```
 
-### Week 6 — NoSQL & MongoDB
+**Error Responses:**
+- `400` - Invalid ID format
+- `404` - Movie not found
 
-- Introduction to NoSQL databases
-- Work with MongoDB
-- Data modeling, collections & documents
-- Implement MongoDB version of CRUD
-- Optional: switch your Movie Library fully to MongoDB
+#### 3. POST /api/movies
+Create a new movie.
 
-### Week 7 — Deployment & Git
+**Request Body:**
+```json
+{
+  "title": "The Matrix",
+  "genre": "Sci-Fi",
+  "year": 1999,
+  "rating": 8.7,
+  "director": "The Wachowskis",
+  "description": "A computer hacker learns about the true nature of reality"
+}
+```
 
-- Learn hosting & deployment process
-- Deploy your Movie Library to a platform like Render/Heroku
-- Improve Git usage: branches, merging, pull requests
-- Team collaboration workflow
+**Required fields:** `title`, `genre`, `year`
 
-### Week 8 — Building RESTful APIs
+**Response (201 Created):**
+```json
+{
+  "message": "Movie created successfully",
+  "data": {
+    "_id": "507f1f77bcf86cd799439011",
+    "title": "The Matrix",
+    "genre": "Sci-Fi",
+    "year": 1999,
+    "rating": 8.7,
+  }
+}
+```
 
-- Understand REST principles
-- Build your own REST API for movies
-  - GET all movies
-  - POST new movie
-  - PUT/PATCH to update
-  - DELETE to remove
-- Test your API using Postman
+**Error Responses:**
+- `400` - Missing required fields or invalid data
 
-### Week 9 — Authentication & Security
+#### 4. PUT /api/movies/:id
+Update an existing movie.
 
-- Learn authentication basics
-- Implement local login (sessions or JWT)
-- Hashing & salting passwords
-- Cookies & session security
-- Restrict movie editing routes to logged-in users
+**Request Body:**
+```json
+{
+  "title": "The Matrix Reloaded",
+  "genre": "Sci-Fi",
+  "year": 2003,
+  "rating": 7.2
+}
+```
 
-### Week 10 — Security Hardening & Final Improvements
+**Response (200 OK):**
+```json
+{
+  "message": "Movie updated successfully",
+  "data": {
+    "_id": "507f1f77bcf86cd799439011",
+    "title": "The Matrix Reloaded",
+    "genre": "Sci-Fi",
+    "year": 2003,
+    "rating": 7.2,
+    "updatedAt": "2024-01-15T11:00:00.000Z"
+  }
+}
+```
 
-- Implement two-factor authentication (if required)
-- Secure API endpoints
-- Prevent SQL injection
-- Secure file uploads (movie posters)
-- Final project polishing & preparation for defense
+**Error Responses:**
+- `400` - Invalid ID or missing fields
+- `404` - Movie not found
+
+#### 5. DELETE /api/movies/:id
+Delete a movie.
+
+**Response (200 OK):**
+```json
+{
+  "message": "Movie deleted successfully",
+  "deletedId": "507f1f77bcf86cd799439011"
+}
+```
+
+**Error Responses:**
+- `400` - Invalid ID format
+- `404` - Movie not found
+
+## Data Model
+```javascript
+{
+  _id: ObjectId,           // Auto-generated by MongoDB
+  title: String,           // Required
+  genre: String,           // Required
+  year: Number,            // Required (1800 - current year + 5)
+  rating: Number,          // Optional (0-10)
+  director: String,        // Optional
+  description: String,     // Optional
+  createdAt: Date,         // Auto-generated
+  updatedAt: Date          // Auto-generated on update
+}
+```
+
+## Testing the API
+
+### Using Browser (GET only)
+Visit http://localhost:3000 and click the test links
+
+### Using curl
+```bash
+# Get all movies
+curl http://localhost:3000/api/movies
+
+# Create a movie
+curl -X POST http://localhost:3000/api/movies \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Inception","genre":"Sci-Fi","year":2010,"rating":8.8}'
+
+# Update a movie
+curl -X PUT http://localhost:3000/api/movies/YOUR_MOVIE_ID \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Inception","genre":"Sci-Fi","year":2010,"rating":9.0}'
+
+# Delete a movie
+curl -X DELETE http://localhost:3000/api/movies/YOUR_MOVIE_ID
+```
+
+### Using Postman or Thunder Client
+1. Import the endpoints listed above
+2. Set headers: `Content-Type: application/json`
+3. Add request body for POST/PUT requests
+
+## Project Structure
+```
+movielibrary/
+├── database/
+│   └── db.js              # MongoDB connection
+├── routes/
+│   └── movies.js          # Movie CRUD routes
+├── views/
+│   ├── index.html         # Home page with test links
+│   ├── about.html
+│   ├── contact.html
+│   └── 404.html
+├── public/
+│   └── style.css
+├── server.js              # Main application file
+├── package.json
+└── README.md
+```
+
+## Features Implemented
+
+MongoDB native driver integration  
+Full CRUD operations  
+Filtering by multiple fields  
+Sorting (ascending/descending)  
+Field projection  
+Input validation  
+Proper HTTP status codes  
+Custom logger middleware  
+Global 404 handler  
+Home page with API test links  
+
+## Assignment Requirements Checklist
+
+- Node.js + Express project
+- MongoDB native driver (no Mongoose)
+- Clear folder structure (routes/, database/)
+- express.json() middleware
+- Custom logger middleware
+- All CRUD routes implemented
+- Filtering, sorting, projection
+- Validation and proper status codes
+- Home page with API test links
+- Global 404 handler
+- README.md with documentation
+```
+
+## Step 7: MongoDB Installation & Setup
+
+### For Windows:
+1. Download MongoDB Community Server: https://www.mongodb.com/try/download/community
+2. Run the installer, choose "Complete" installation
+3. Install MongoDB as a Service (check the option during installation)
+4. Create data directory: `mkdir C:\data\db`
+5. Start MongoDB: It should start automatically as a service, or run:
+```
+   "C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath="C:\data\db"
