@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -29,11 +29,22 @@
       <p class="subtitle">
         Your personal library for organizing, tracking, and discovering movies using MongoDB.
       </p>
+      <button id="addMovieBtn" class="btn-primary">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Add New Movie
+      </button>
     </header>
 
     <!-- Search & Filter Section -->
     <section class="controls-section">
       <div class="search-bar">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
         <input type="text" id="searchInput" placeholder="Search by title...">
       </div>
 
@@ -47,6 +58,8 @@
           <option value="Horror">Horror</option>
           <option value="Romance">Romance</option>
           <option value="Thriller">Thriller</option>
+          <option value="Adventure">Adventure</option>
+          <option value="Animation">Animation</option>
         </select>
 
         <select id="yearSelect">
@@ -56,15 +69,17 @@
           <option value="2022">2022</option>
           <option value="2021">2021</option>
           <option value="2020">2020</option>
-          <option value="2010">2010s</option>
+          <option value="2019">2019</option>
+          <option value="2018">2018</option>
         </select>
 
         <select id="sortSelect">
-          <option value="title_asc">Sort by Title (A-Z)</option>
-          <option value="title_desc">Sort by Title (Z-A)</option>
+          <option value="title_asc">Title (A-Z)</option>
+          <option value="title_desc">Title (Z-A)</option>
           <option value="year_desc">Newest First</option>
           <option value="year_asc">Oldest First</option>
           <option value="rating_desc">Highest Rated</option>
+          <option value="rating_asc">Lowest Rated</option>
         </select>
       </div>
     </section>
@@ -72,8 +87,10 @@
     <!-- Movie Grid -->
     <main>
       <div id="movieGrid" class="movie-grid">
-        <!-- Movies will be rendered here by client.js -->
-        <div class="loading-state">Loading movies...</div>
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Loading movies...</p>
+        </div>
       </div>
     </main>
 
@@ -81,12 +98,76 @@
       <h3>About this Project</h3>
       <p>
         Movie Library is a full-stack application built with Node.js, Express, and MongoDB.
-        It demonstrates RESTful API principles including CRUD operations, standard status codes, and database
-        integration.
+        It demonstrates RESTful API principles including CRUD operations, filtering, sorting, and database integration.
       </p>
     </section>
 
   </div>
+
+  <!-- Movie Modal -->
+  <div id="movieModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Add New Movie</h2>
+        <button id="cancelBtn" class="close-btn">×</button>
+      </div>
+      
+      <form id="movieForm">
+        <div class="form-row">
+          <div class="field">
+            <label for="title">Title *</label>
+            <input type="text" id="title" name="title" required placeholder="e.g., The Matrix">
+          </div>
+
+          <div class="field">
+            <label for="genre">Genre *</label>
+            <select id="genre" name="genre" required>
+              <option value="">Select Genre</option>
+              <option value="Action">Action</option>
+              <option value="Drama">Drama</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Horror">Horror</option>
+              <option value="Romance">Romance</option>
+              <option value="Thriller">Thriller</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Animation">Animation</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="year">Year *</label>
+            <input type="number" id="year" name="year" required min="1800" max="2030" placeholder="e.g., 1999">
+          </div>
+
+          <div class="field">
+            <label for="rating">Rating (0-10)</label>
+            <input type="number" id="rating" name="rating" min="0" max="10" step="0.1" placeholder="e.g., 8.7">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="director">Director</label>
+          <input type="text" id="director" name="director" placeholder="e.g., Christopher Nolan">
+        </div>
+
+        <div class="field">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" rows="4" placeholder="Brief description of the movie..."></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="cancelBtn" class="btn-secondary">Cancel</button>
+          <button type="submit" class="btn-primary">Save Movie</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
 
   <script src="/client.js"></script>
 </body>
