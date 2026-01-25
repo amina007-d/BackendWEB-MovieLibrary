@@ -107,8 +107,13 @@ function renderMovies(movies) {
         const genre = movie.genre || 'Unknown Genre';
         const rating = movie.rating !== undefined && movie.rating !== null ? `${movie.rating}/10` : 'No Rating';
         const director = movie.director ? `${movie.director}` : 'Unknown Director';
+        const posterUrl = movie.posterUrl || 'https://via.placeholder.com/320x400/6D8196/FFFFFF?text=No+Poster';
+        const trailerUrl = movie.trailerUrl || '';
 
         card.innerHTML = `
+            <img src="${posterUrl}" alt="${title}" class="movie-poster" onclick="openDetailModal('${movie._id}')" 
+                 onmouseover="playTrailer(this, '${trailerUrl}')" 
+                 onmouseout="stopTrailer(this, '${posterUrl}')">
             <div class="card-content">
                 <div class="card-header">
                     <span class="genre-tag">${genre}</span>
@@ -141,6 +146,117 @@ function renderMovies(movies) {
         movieGrid.appendChild(card);
     });
 }
+
+// Trailer hover functionality
+let trailerTimeouts = new Map();
+
+window.playTrailer = function(img, trailerUrl) {
+    if (!trailerUrl) return;
+    
+    const timeout = setTimeout(() => {
+        const videoId = extractYouTubeId(trailerUrl);
+        if (videoId) {
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0`;
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.position = 'absolute';
+            iframe.style.top = '0';
+            iframe.style.left = '0';
+            iframe.allow = 'autoplay';
+            
+            img.style.position = 'relative';
+            img.parentElement.style.position = 'relative';
+            img.style.opacity = '0';
+            img.parentElement.insertBefore(iframe, img.nextSibling);
+        }
+    }, 1000);
+    
+    trailerTimeouts.set(img, timeout);
+};
+
+window.stopTrailer = function(img, posterUrl) {
+    const timeout = trailerTimeouts.get(img);
+    if (timeout) {
+        clearTimeout(timeout);
+        trailerTimeouts.delete(img);
+    }
+    
+    const iframe = img.parentElement.querySelector('iframe');
+    if (iframe) {
+        iframe.remove();
+    }
+    img.style.opacity = '1';
+};
+
+function extractYouTubeId(url) {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+}
+
+// Open Detail Modal
+window.openDetailModal = async function(id) {
+    try {
+        const response = await fetch(`${API_URL}/${id}`);
+        if (!response.ok) throw new Error('Failed to fetch movie');
+        
+        const movie = await response.json();
+        
+        const detailModal = document.createElement('div');
+        detailModal.className = 'modal active';
+        detailModal.id = 'detailModal';
+        
+        const posterUrl = movie.posterUrl || 'https://via.placeholder.com/900x500/6D8196/FFFFFF?text=No+Poster';
+        const trailerUrl = movie.trailerUrl || '';
+        const videoId = extractYouTubeId(trailerUrl);
+        
+        detailModal.innerHTML = `
+            <div class="detail-modal-content">
+                ${videoId ? `
+                    <div class="trailer-container">
+                        <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=0&controls=1" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                ` : `<img src="${posterUrl}" alt="${movie.title}" class="detail-poster">`}
+                <div class="detail-content">
+                    <div class="detail-header">
+                        <h2 class="detail-title">${movie.title}</h2>
+                        <button class="close-btn" onclick="closeDetailModal()">×</button>
+                    </div>
+                    <div class="detail-meta">
+                        <span class="genre-tag">${movie.genre}</span>
+                        <span class="year-badge">${movie.year}</span>
+                        <span class="rating-tag">${movie.rating ? `${movie.rating}/10` : 'No Rating'}</span>
+                    </div>
+                    ${movie.director ? `<p><strong>Director:</strong> ${movie.director}</p>` : ''}
+                    <p class="detail-description">${movie.description || 'No description available.'}</p>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(detailModal);
+        document.body.style.overflow = 'hidden';
+        
+        detailModal.addEventListener('click', (e) => {
+            if (e.target === detailModal) closeDetailModal();
+        });
+    } catch (error) {
+        console.error('Error loading movie details:', error);
+        showToast('Failed to load movie details', 'error');
+    }
+};
+
+window.closeDetailModal = function() {
+    const detailModal = document.getElementById('detailModal');
+    if (detailModal) {
+        detailModal.remove();
+        document.body.style.overflow = 'auto';
+    }
+};
 
 // Modal Functions
 function openAddModal() {
@@ -178,6 +294,8 @@ window.editMovie = async (id) => {
         document.getElementById('rating').value = movie.rating || '';
         document.getElementById('director').value = movie.director || '';
         document.getElementById('description').value = movie.description || '';
+        document.getElementById('posterUrl').value = movie.posterUrl || '';
+        document.getElementById('trailerUrl').value = movie.trailerUrl || '';
         
         movieModal.classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -197,7 +315,9 @@ async function handleFormSubmit(e) {
         year: parseInt(document.getElementById('year').value),
         rating: parseFloat(document.getElementById('rating').value) || null,
         director: document.getElementById('director').value.trim() || null,
-        description: document.getElementById('description').value.trim() || null
+        description: document.getElementById('description').value.trim() || null,
+        posterUrl: document.getElementById('posterUrl').value.trim() || null,
+        trailerUrl: document.getElementById('trailerUrl').value.trim() || null
     };
 
     try {

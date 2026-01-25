@@ -83,7 +83,7 @@ router.get('/:id', async (req, res) => {
 // Yerassyl's part
 router.post('/', async (req, res) => {
   try {
-    const { title, genre, year, rating, director, description } = req.body;
+    const { title, genre, year, rating, director, description, posterUrl, trailerUrl } = req.body;
 
     // Validation
     if (!title || !genre || !year) {
@@ -108,6 +108,8 @@ router.post('/', async (req, res) => {
       rating: rating || null,
       director: director || null,
       description: description || null,
+      posterUrl: posterUrl || null,
+      trailerUrl: trailerUrl || null,
       createdAt: new Date()
     };
 
@@ -130,7 +132,7 @@ router.post('/', async (req, res) => {
 // Nazerke's part
 router.put('/:id', async (req, res) => {
   try {
-    const { title, genre, year, rating, director, description } = req.body;
+    const { title, genre, year, rating, director, description, posterUrl, trailerUrl } = req.body;
 
     // Validate ObjectId
     if (!ObjectId.isValid(req.params.id)) {
@@ -160,6 +162,8 @@ router.put('/:id', async (req, res) => {
       rating: rating || null,
       director: director || null,
       description: description || null,
+      posterUrl: posterUrl || null,
+      trailerUrl: trailerUrl || null,
       updatedAt: new Date()
     };
 

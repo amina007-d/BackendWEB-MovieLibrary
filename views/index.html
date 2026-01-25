@@ -38,7 +38,6 @@
       </button>
     </header>
 
-    <!-- Search & Filter Section -->
     <section class="controls-section">
       <div class="search-bar">
         <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -84,7 +83,6 @@
       </div>
     </section>
 
-    <!-- Movie Grid -->
     <main>
       <div id="movieGrid" class="movie-grid">
         <div class="loading-state">
@@ -104,7 +102,6 @@
 
   </div>
 
-  <!-- Movie Modal -->
   <div id="movieModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -115,12 +112,12 @@
       <form id="movieForm">
         <div class="form-row">
           <div class="field">
-            <label for="title">Title *</label>
+            <label for="title">Title</label>
             <input type="text" id="title" name="title" required placeholder="e.g., The Matrix">
           </div>
 
           <div class="field">
-            <label for="genre">Genre *</label>
+            <label for="genre">Genre</label>
             <select id="genre" name="genre" required>
               <option value="">Select Genre</option>
               <option value="Action">Action</option>
@@ -138,7 +135,7 @@
 
         <div class="form-row">
           <div class="field">
-            <label for="year">Year *</label>
+            <label for="year">Year</label>
             <input type="number" id="year" name="year" required min="1800" max="2030" placeholder="e.g., 1999">
           </div>
 
@@ -154,6 +151,16 @@
         </div>
 
         <div class="field">
+          <label for="posterUrl">Poster URL</label>
+          <input type="url" id="posterUrl" name="posterUrl" placeholder="https://example.com/poster.jpg">
+        </div>
+
+        <div class="field">
+          <label for="trailerUrl">Trailer URL (YouTube)</label>
+          <input type="url" id="trailerUrl" name="trailerUrl" placeholder="https://www.youtube.com/watch?v=...">
+        </div>
+
+        <div class="field">
           <label for="description">Description</label>
           <textarea id="description" name="description" rows="4" placeholder="Brief description of the movie..."></textarea>
         </div>
@@ -166,7 +173,6 @@
     </div>
   </div>
 
-  <!-- Toast Notification -->
   <div id="toast" class="toast"></div>
 
   <script src="/client.js"></script>
