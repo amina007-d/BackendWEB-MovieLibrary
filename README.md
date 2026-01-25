@@ -60,7 +60,7 @@ Before you begin, ensure you have the following installed:
 
 ### 1. Clone the Repository
 ```bash
-git clone <your-repo-url>
+git clone <repo-url>
 cd movielibrary
 ```
 
@@ -129,7 +129,7 @@ movielibrary/
 
 ### Base URL
 ```
-http://localhost:3000/api/movies
+https://movielibrary-3w4z.onrender.com/api/movies
 ```
 
 ### Endpoints
@@ -318,7 +318,7 @@ DELETE /api/movies/507f1f77bcf86cd799439011
 ## Testing the API
 
 ### Using the Web Interface
-1. Visit `http://localhost:3000`
+1. Visit `https://movielibrary-3w4z.onrender.com/`
 2. Use the "Add New Movie" button to create movies
 3. Search, filter, and sort movies using the controls
 4. Click movie posters to view details and watch trailers
@@ -330,12 +330,12 @@ DELETE /api/movies/507f1f77bcf86cd799439011
 
 **Get all movies:**
 ```bash
-curl http://localhost:3000/api/movies
+curl https://movielibrary-3w4z.onrender.com/api/movies
 ```
 
 **Create a movie:**
 ```bash
-curl -X POST http://localhost:3000/api/movies \
+curl -X POST https://movielibrary-3w4z.onrender.com/api/movies \
   -H "Content-Type: application/json" \
   -d '{
     "title": "Inception",
@@ -351,7 +351,7 @@ curl -X POST http://localhost:3000/api/movies \
 
 **Update a movie:**
 ```bash
-curl -X PUT http://localhost:3000/api/movies/YOUR_MOVIE_ID \
+curl -X PUT https://movielibrary-3w4z.onrender.com/api/movies/YOUR_MOVIE_ID \
   -H "Content-Type: application/json" \
   -d '{
     "title": "Inception",
@@ -367,7 +367,7 @@ curl -X PUT http://localhost:3000/api/movies/YOUR_MOVIE_ID \
 
 **Delete a movie:**
 ```bash
-curl -X DELETE http://localhost:3000/api/movies/YOUR_MOVIE_ID
+curl -X DELETE https://movielibrary-3w4z.onrender.com/api/movies/YOUR_MOVIE_ID
 ```
 
 ## UI Features
