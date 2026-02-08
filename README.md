@@ -1,488 +1,906 @@
-# Movie Library - Full Stack Application
+# MovieLib - Movie Library Management System
 
-A modern, full-stack movie management application built with Node.js, Express, MongoDB, and vanilla JavaScript. Features a beautiful dark-themed UI with complete CRUD operations, movie posters, trailer previews, and advanced filtering.
+A full-stack web application for managing and discovering movies, built with Node.js, Express, and MongoDB. Features include user authentication, role-based access control, personal watchlists, and movie reviews.
+
+## Table of Contents
+
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [API Documentation](#api-documentation)
+- [Security Implementation](#security-implementation)
+- [Database Design](#database-design)
+- [Team Members](#team-members)
+- [Assignment Requirements](#assignment-requirements)
+
+---
 
 ## Features
 
-### Frontend
-- Modern Dark Theme - Ink wash inspired color palette with glassmorphism effects
-- Real-time Search - Debounced search with instant results
-- Advanced Filtering - Filter by genre, year, and custom sorting
-- Movie Posters - Display movie posters with hover-to-play trailer functionality
-- Detail Modal - Click posters to view full movie details with embedded trailers
-- Add/Edit Movies - Full modal interface for creating and updating movies
-- Delete Functionality - Safe deletion with confirmation dialogs
-- Fully Responsive - Works perfectly on desktop, tablet, and mobile
-- Smooth Animations - Polished transitions and hover effects
-- Toast Notifications - User-friendly success/error messages
-- Movie Cards - Beautiful card design with genre tags and ratings
+### Core Functionality
+- **Movie Management**: Full CRUD operations for movies (Admin only)
+- **User Authentication**: Secure login/register with session-based authentication
+- **Role-Based Access Control**: Distinct permissions for `admin` and `user` roles
+- **Personal Watchlist**: Users can save movies to their personal watchlist
+- **Review System**: Users can rate and review movies (1-5 stars)
+- **Advanced Search & Filtering**: Search by title, filter by genre/year, sort by various criteria
+- **Responsive UI**: Modern, mobile-friendly interface with dark theme
 
-### Backend API
-- Full CRUD Operations - Create, Read, Update, Delete movies
-- MongoDB Integration - Native MongoDB driver (no Mongoose)
-- Advanced Querying - Filtering, sorting, projection, and pagination
-- Input Validation - Comprehensive data validation
-- Error Handling - Proper HTTP status codes and error messages
-- Logging Middleware - Custom request logging
-- RESTful Design - Clean, standard API endpoints
+### User Roles
+- **Admin**:
+  - Create, edit, and delete movies
+  - Manage users (view all users, delete users)
+  - Access admin dashboard
+  - All user permissions
 
-## Team Members
+- **Regular User**:
+  - View all movies
+  - Add/remove movies from personal watchlist
+  - Write, edit, and delete their own reviews
+  - Update their profile information
 
-| Name | Role | Contribution |
-|------|------|-------------|
-| Amina Dossan | Backend Developer | GET routes, filtering, and MongoDB queries |
-| Yerassyl Alimbek | Backend Developer | POST route, validation, and data creation |
-| Nazerke Abdizhamal | Full Stack Developer | PUT route, middleware, and form handling |
-| Almat Zhamsat | Frontend Developer | DELETE route, styling, and UI/UX design |
+---
 
-## Technologies
+## Technology Stack
 
 ### Backend
-- Node.js (v18+) - JavaScript runtime
-- Express.js (v4.18) - Web framework
-- MongoDB (v7.0) - NoSQL database
-- dotenv - Environment variable management
+- **Node.js** - Runtime environment
+- **Express.js** - Web framework
+- **MongoDB** - NoSQL database
+- **express-session** - Session management
+- **connect-mongo** - MongoDB session store
+- **bcryptjs** - Password hashing
+- **dotenv** - Environment variable management
 
 ### Frontend
-- HTML5 - Semantic markup
-- CSS3 - Modern styling with dark theme, gradients, animations
-- JavaScript (ES6+) - Vanilla JavaScript for interactivity
-- Fetch API - AJAX requests
+- **Vanilla JavaScript** - Client-side logic
+- **HTML5/CSS3** - Structure and styling
+- **Fetch API** - Asynchronous requests
 
-## Prerequisites
-
-Before you begin, ensure you have the following installed:
-- Node.js (v18 or higher)
-- MongoDB (v7.0 or higher)
-- npm (comes with Node.js)
-
-## Quick Start
-
-### 1. Clone the Repository
-```bash
-git clone <repo-url>
-cd movielibrary
-```
-
-### 2. Install Dependencies
-```bash
-npm install
-```
-
-### 3. Set Up Environment Variables
-Create a `.env` file in the root directory:
-```env
-MONGO_URI=mongodb://localhost:27017
-PORT=3000
-NODE_ENV=development
-```
-
-### 4. Start MongoDB
-
-**Windows:**
-```bash
-"C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath="C:\data\db"
-```
-
-**macOS (with Homebrew):**
-```bash
-brew services start mongodb-community
-```
-
-**Linux:**
-```bash
-sudo systemctl start mongod
-```
-
-### 5. Start the Application
-```bash
-npm start
-```
-
-The server will start at: **http://localhost:3000**
+---
 
 ## Project Structure
 
 ```
-movielibrary/
+BackendWEB-MovieLibrary/
 ├── database/
-│   └── db.js                 # MongoDB connection and utilities
-├── routes/
-│   └── movies.js             # Movie CRUD API routes
-├── views/
-│   ├── index.html            # Main movie library page
-│   ├── about.html            # About page
-│   ├── contact.html          # Contact form page
-│   └── 404.html              # 404 error page
+│   └── db.js                 # MongoDB connection configuration
+├── middleware/
+│   ├── admin.js              # Admin role authorization middleware
+│   └── auth.js               # Authentication middleware
 ├── public/
-│   ├── client.js             # Frontend JavaScript
-│   └── style.css             # Dark theme styles and animations
-├── .env                      # Environment variables (create this)
-├── server.js                 # Express server setup
-├── package.json              # Dependencies and scripts
-├── messages.json             # Contact form submissions
-├── project-info.json         # API info endpoint data
-└── README.md                 # This file
+│   ├── client.js             # Frontend JavaScript logic
+│   └── style.css             # Application styling
+├── routes/
+│   ├── auth.js               # Authentication routes (login, register, logout)
+│   ├── movies.js             # Movie CRUD routes
+│   ├── reviews.js            # Review management routes
+│   ├── users.js              # User management routes
+│   └── watchlist.js          # Watchlist management routes
+├── views/
+│   ├── 404.html              # Error page
+│   ├── about.html            # About page
+│   ├── admin.html            # Admin dashboard
+│   ├── contact.html          # Contact page
+│   ├── index.html            # Home page
+│   └── watchlist.html        # User watchlist page
+├── .env                      # Environment variables (not in repo)
+├── .gitignore               # Git ignore file
+├── package.json             # Project dependencies
+├── server.js                # Application entry point
+└── README.md                # Project documentation
 ```
+
+---
+
+## Installation
+
+### Prerequisites
+- **Node.js** (v14 or higher)
+- **MongoDB Atlas account** (or local MongoDB instance)
+- **npm** or **yarn**
+
+### Steps
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd BackendWEB-MovieLibrary
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Create `.env` file**
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **Configure environment variables** (see [Configuration](#configuration))
+
+5. **Start the server**
+   ```bash
+   # Development mode
+   npm run dev
+
+   # Production mode
+   npm start
+   ```
+
+6. **Access the application**
+   ```
+   http://localhost:3000
+   ```
+
+---
+
+## Configuration
+
+Create a `.env` file in the root directory:
+
+```env
+# MongoDB Connection
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/movieLibraryDB?retryWrites=true&w=majority
+
+# Session Secret (change in production!)
+SESSION_SECRET=your_super_secret_session_key_change_this_in_production
+
+# Environment
+NODE_ENV=development
+# Set to 'production' when deploying
+```
+
+### Security Notes
+- **Never commit `.env` to version control**
+- Change `SESSION_SECRET` to a random, strong key in production
+- Set `NODE_ENV=production` when deploying to enable secure cookies
+
+---
+
+## Usage
+
+### For Regular Users
+
+1. **Register an Account**
+   - Click "Register" in the navigation
+   - Fill in name, email, phone (optional), and password
+   - Password must be at least 6 characters
+
+2. **Browse Movies**
+   - View all movies on the home page
+   - Use search bar to find specific titles
+   - Filter by genre or year
+   - Sort by title, year, or rating
+
+3. **Manage Watchlist**
+   - Click "Watchlist" button on any movie card
+   - Access "My Watchlist" from navigation
+   - Remove movies from watchlist as needed
+
+4. **Write Reviews**
+   - Click on a movie poster to open details
+   - Rate from 1-5 stars
+   - Write a comment (optional)
+   - Edit or delete your own reviews
+
+5. **Update Profile**
+   - Click your name in the navigation
+   - Update name, phone, or password
+   - Save changes
+
+### For Administrators
+
+1. **Access Admin Dashboard**
+   - Log in with admin credentials
+   - Navigate to "Admin" in the menu
+
+2. **Manage Movies**
+   - **Add Movie**: Click "Add New Movie" button
+   - **Edit Movie**: Click "Edit" on any movie
+   - **Delete Movie**: Click "Delete" (requires confirmation)
+
+3. **Manage Users**
+   - View all registered users
+   - Delete user accounts (except admins)
+
+---
 
 ## API Documentation
 
+### Hosted URL
+
+https://movielibrary-3w4z.onrender.com
+
 ### Base URL
 ```
-https://movielibrary-3w4z.onrender.com/api/movies
+http://localhost:3000/api
 ```
 
-### Endpoints
+### Authentication Endpoints
 
-#### 1. GET `/api/movies`
-Retrieve all movies with optional filtering, sorting, and projection.
+#### Register User
+```http
+POST /api/auth/register
+Content-Type: application/json
 
-**Query Parameters:**
-| Parameter | Type | Description | Example |
-|-----------|------|-------------|---------|
-| `title` | string | Search by title (case-insensitive) | `?title=matrix` |
-| `genre` | string | Filter by genre | `?genre=Sci-Fi` |
-| `year` | number | Filter by year | `?year=2023` |
-| `sortBy` | string | Field to sort by | `?sortBy=rating` |
-| `order` | string | Sort order (`asc` or `desc`) | `?order=desc` |
-| `fields` | string | Select specific fields | `?fields=title,year` |
-
-**Example Request:**
-```bash
-GET /api/movies?genre=Action&sortBy=rating&order=desc
-```
-
-**Response (200 OK):**
-```json
 {
-  "count": 2,
+  "name": "John Doe",
+  "email": "john@example.com",
+  "phone": "+1234567890",
+  "password": "securepassword"
+}
+
+Response: 201 Created
+{
+  "message": "User registered"
+}
+```
+
+#### Login
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "securepassword"
+}
+
+Response: 200 OK
+{
+  "message": "Logged in successfully"
+}
+```
+
+#### Logout
+```http
+POST /api/auth/logout
+
+Response: 200 OK
+{
+  "message": "Logged out successfully"
+}
+```
+
+#### Check Auth Status
+```http
+GET /api/auth/status
+
+Response: 200 OK
+{
+  "isAuthenticated": true,
+  "user": {
+    "email": "john@example.com",
+    "role": "user",
+    "name": "John Doe"
+  }
+}
+```
+
+---
+
+### Movie Endpoints
+
+#### Get All Movies (with filters)
+```http
+GET /api/movies?genre=Action&year=2023&sortBy=rating&order=desc
+
+Response: 200 OK
+{
+  "count": 15,
   "data": [
     {
       "_id": "507f1f77bcf86cd799439011",
-      "title": "Inception",
+      "title": "The Matrix",
       "genre": "Sci-Fi",
-      "year": 2010,
-      "rating": 8.8,
-      "director": "Christopher Nolan",
-      "description": "A mind-bending thriller about dream invasion",
-      "posterUrl": "https://example.com/inception-poster.jpg",
-      "trailerUrl": "https://www.youtube.com/watch?v=YoHD9XEInc0",
-      "createdAt": "2024-01-15T10:30:00.000Z"
+      "year": 1999,
+      "rating": 8.7,
+      "director": "Wachowski Brothers",
+      "description": "A computer hacker learns...",
+      "posterUrl": "https://...",
+      "trailerUrl": "https://youtube.com/...",
+      "movieLink": "https://...",
+      "createdAt": "2024-01-15T10:30:00Z"
     }
   ]
 }
 ```
 
-#### 2. GET `/api/movies/:id`
-Retrieve a single movie by ID.
+**Query Parameters:**
+- `title` - Search by title (case-insensitive)
+- `genre` - Filter by genre
+- `year` - Filter by year
+- `sortBy` - Sort field (title, year, rating)
+- `order` - Sort order (asc, desc)
+- `fields` - Projection (comma-separated field names)
 
-**Example Request:**
-```bash
-GET /api/movies/507f1f77bcf86cd799439011
-```
+#### Get Single Movie
+```http
+GET /api/movies/:id
 
-**Response (200 OK):**
-```json
+Response: 200 OK
 {
   "_id": "507f1f77bcf86cd799439011",
+  "title": "The Matrix",
+  ...
+}
+```
+
+#### Create Movie (Admin Only)
+```http
+POST /api/movies
+Authorization: Required (Admin)
+Content-Type: application/json
+
+{
   "title": "Inception",
   "genre": "Sci-Fi",
   "year": 2010,
   "rating": 8.8,
   "director": "Christopher Nolan",
-  "description": "A mind-bending thriller",
-  "posterUrl": "https://example.com/inception-poster.jpg",
-  "trailerUrl": "https://www.youtube.com/watch?v=YoHD9XEInc0"
+  "description": "A thief who steals...",
+  "posterUrl": "https://...",
+  "trailerUrl": "https://...",
+  "movieLink": "https://..."
 }
-```
 
-**Error Responses:**
-- `400 Bad Request` - Invalid ID format
-- `404 Not Found` - Movie not found
-
-#### 3. POST `/api/movies`
-Create a new movie.
-
-**Request Body:**
-```json
-{
-  "title": "The Matrix",
-  "genre": "Sci-Fi",
-  "year": 1999,
-  "rating": 8.7,
-  "director": "The Wachowskis",
-  "description": "A computer hacker learns about the true nature of reality",
-  "posterUrl": "https://example.com/matrix-poster.jpg",
-  "trailerUrl": "https://www.youtube.com/watch?v=vKQi3bBA1y8"
-}
-```
-
-**Required Fields:** `title`, `genre`, `year`
-
-**Response (201 Created):**
-```json
+Response: 201 Created
 {
   "message": "Movie created successfully",
-  "data": {
-    "_id": "507f1f77bcf86cd799439012",
-    "title": "The Matrix",
-    "genre": "Sci-Fi",
-    "year": 1999,
-    "rating": 8.7,
-    "director": "The Wachowskis",
-    "description": "A computer hacker learns about the true nature of reality",
-    "posterUrl": "https://example.com/matrix-poster.jpg",
-    "trailerUrl": "https://www.youtube.com/watch?v=vKQi3bBA1y8",
-    "createdAt": "2024-01-15T11:00:00.000Z"
-  }
+  "data": { ... }
 }
 ```
 
-**Error Responses:**
-- `400 Bad Request` - Missing required fields or invalid data
+#### Update Movie (Admin Only)
+```http
+PUT /api/movies/:id
+Authorization: Required (Admin)
+Content-Type: application/json
 
-#### 4. PUT `/api/movies/:id`
-Update an existing movie.
-
-**Request Body:**
-```json
 {
-  "title": "The Matrix Reloaded",
-  "genre": "Sci-Fi",
-  "year": 2003,
-  "rating": 7.2,
-  "director": "The Wachowskis",
-  "description": "Updated description",
-  "posterUrl": "https://example.com/matrix-reloaded-poster.jpg",
-  "trailerUrl": "https://www.youtube.com/watch?v=kYzz0FSgpSU"
+  "title": "Inception",
+  "rating": 9.0
 }
-```
 
-**Response (200 OK):**
-```json
+Response: 200 OK
 {
-  "message": "Movie updated successfully",
-  "data": {
-    "_id": "507f1f77bcf86cd799439011",
-    "title": "The Matrix Reloaded",
-    "genre": "Sci-Fi",
-    "year": 2003,
-    "rating": 7.2,
-    "updatedAt": "2024-01-15T12:00:00.000Z"
-  }
+  "message": "Movie updated successfully"
 }
 ```
 
-**Error Responses:**
-- `400 Bad Request` - Invalid ID or missing required fields
-- `404 Not Found` - Movie not found
+#### Delete Movie (Admin Only)
+```http
+DELETE /api/movies/:id
+Authorization: Required (Admin)
 
-#### 5. DELETE `/api/movies/:id`
-Delete a movie.
-
-**Example Request:**
-```bash
-DELETE /api/movies/507f1f77bcf86cd799439011
-```
-
-**Response (200 OK):**
-```json
+Response: 200 OK
 {
   "message": "Movie deleted successfully",
   "deletedId": "507f1f77bcf86cd799439011"
 }
 ```
 
-**Error Responses:**
-- `400 Bad Request` - Invalid ID format
-- `404 Not Found` - Movie not found
+---
 
-## Data Model
+### Watchlist Endpoints
 
-```javascript
+#### Get User Watchlist
+```http
+GET /api/watchlist
+Authorization: Required
+
+Response: 200 OK
+[
+  {
+    "_id": "507f1f77bcf86cd799439011",
+    "title": "The Matrix",
+    ...
+  }
+]
+```
+
+#### Add to Watchlist
+```http
+POST /api/watchlist
+Authorization: Required
+Content-Type: application/json
+
 {
-  _id: ObjectId,           // Auto-generated by MongoDB
-  title: String,           // Required (movie title)
-  genre: String,           // Required (e.g., "Sci-Fi", "Action")
-  year: Number,            // Required (1800 - current year + 5)
-  rating: Number,          // Optional (0-10, can be decimal)
-  director: String,        // Optional (director name)
-  description: String,     // Optional (movie description)
-  posterUrl: String,       // Optional (URL to movie poster image)
-  trailerUrl: String,      // Optional (YouTube URL for trailer)
-  createdAt: Date,         // Auto-generated on creation
-  updatedAt: Date          // Auto-generated on update
+  "movieId": "507f1f77bcf86cd799439011"
+}
+
+Response: 201 Created
+{
+  "message": "Added to watchlist"
 }
 ```
 
-## Testing the API
+#### Remove from Watchlist
+```http
+DELETE /api/watchlist/:movieId
+Authorization: Required
 
-### Using the Web Interface
-1. Visit `https://movielibrary-3w4z.onrender.com/`
-2. Use the "Add New Movie" button to create movies
-3. Search, filter, and sort movies using the controls
-4. Click movie posters to view details and watch trailers
-5. Hover over posters to preview trailers
-6. Click "Edit" to update movie details
-7. Click "Delete" to remove movies
-
-### Using curl
-
-**Get all movies:**
-```bash
-curl https://movielibrary-3w4z.onrender.com/api/movies
+Response: 200 OK
+{
+  "message": "Removed from watchlist"
+}
 ```
-
-**Create a movie:**
-```bash
-curl -X POST https://movielibrary-3w4z.onrender.com/api/movies \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Inception",
-    "genre": "Sci-Fi",
-    "year": 2010,
-    "rating": 8.8,
-    "director": "Christopher Nolan",
-    "description": "A mind-bending thriller",
-    "posterUrl": "https://example.com/inception.jpg",
-    "trailerUrl": "https://www.youtube.com/watch?v=YoHD9XEInc0"
-  }'
-```
-
-**Update a movie:**
-```bash
-curl -X PUT https://movielibrary-3w4z.onrender.com/api/movies/YOUR_MOVIE_ID \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Inception",
-    "genre": "Sci-Fi",
-    "year": 2010,
-    "rating": 9.0,
-    "director": "Christopher Nolan",
-    "description": "Updated description",
-    "posterUrl": "https://example.com/inception.jpg",
-    "trailerUrl": "https://www.youtube.com/watch?v=YoHD9XEInc0"
-  }'
-```
-
-**Delete a movie:**
-```bash
-curl -X DELETE https://movielibrary-3w4z.onrender.com/api/movies/YOUR_MOVIE_ID
-```
-
-## UI Features
-
-### Design Elements
-- Dark Theme - Ink wash inspired color palette with professional aesthetics
-- Smooth Animations - Card hover effects, modal transitions
-- Toast Notifications - Success/error feedback
-- Loading States - Spinner animation while fetching data
-- Empty States - Helpful messages when no movies found
-- Responsive Design - Works on all screen sizes
-- Movie Posters - Visual representation of each movie
-- Trailer Preview - Hover to play trailers automatically
-- Detail Modal - Full movie information with embedded trailers
-
-### User Experience
-- Debounced Search - 500ms delay to reduce API calls
-- Instant Filters - Real-time filtering and sorting
-- Modal Forms - Add/edit movies without page refresh
-- Confirmation Dialogs - Prevent accidental deletions
-- Error Handling - User-friendly error messages
-- Poster Display - Visual movie library experience
-- Trailer Integration - Watch trailers without leaving the page
-
-## Validation Rules
-
-### Movie Creation/Update
-- **Title:** Required, must be a non-empty string
-- **Genre:** Required, must be a non-empty string
-- **Year:** Required, must be a number between 1800 and (current year + 5)
-- **Rating:** Optional, must be between 0 and 10 if provided
-- **Director:** Optional, string
-- **Description:** Optional, string
-- **Poster URL:** Optional, must be a valid URL if provided
-- **Trailer URL:** Optional, must be a valid URL if provided (YouTube recommended)
-
-## Troubleshooting
-
-### MongoDB Connection Issues
-```bash
-# Check if MongoDB is running
-mongosh
-
-# If not running, start it:
-# Windows
-net start MongoDB
-
-# macOS
-brew services start mongodb-community
-
-# Linux
-sudo systemctl start mongod
-```
-
-### Port Already in Use
-If port 3000 is already in use, change it in `.env`:
-```env
-PORT=3001
-```
-
-### Module Not Found Errors
-```bash
-# Clear node_modules and reinstall
-rm -rf node_modules package-lock.json
-npm install
-```
-
-## Assignment Checklist
-
-- Node.js + Express project setup
-- MongoDB native driver integration (no Mongoose)
-- Clear folder structure (routes/, database/, views/, public/)
-- express.json() middleware for parsing JSON
-- Custom logger middleware
-- All CRUD operations implemented
-- Filtering by multiple fields
-- Sorting (ascending/descending)
-- Field projection
-- Input validation with proper error messages
-- Proper HTTP status codes
-- Beautiful, functional web interface with dark theme
-- Real-time search and filtering
-- Add/Edit/Delete functionality in UI
-- Movie poster display
-- Trailer preview on hover
-- Detail modal with embedded trailers
-- Global 404 handler
-- Comprehensive README.md
-
-## Future Enhancements
-
-- User authentication and authorization
-- Movie poster image uploads to cloud storage
-- Pagination for large datasets
-- Advanced search (multiple criteria)
-- Rating system with user reviews
-- Export data to CSV/JSON
-- Light/Dark mode toggle
-- Movie recommendations based on preferences
-- Watch later / favorites list
-- Integration with external movie APIs (TMDB, OMDB)
-- Auto-fetch posters and trailers from external APIs
-
-## License
-
-This project is created for educational purposes as part of a Backend Web Development course.
-
-## Contributing
-
-This is a student project. For any suggestions or improvements, please contact the team members.
-
-## Contact
-
-For questions or feedback, use the contact form at `/contact` or reach out to any team member.
 
 ---
 
-Made with care by the MovieLib Team
+### Review Endpoints
+
+#### Get Movie Reviews
+```http
+GET /api/reviews/:movieId
+
+Response: 200 OK
+{
+  "reviews": [
+    {
+      "_id": "...",
+      "rating": 5,
+      "comment": "Amazing movie!",
+      "createdAt": "2024-02-08T10:00:00Z",
+      "user": {
+        "email": "john@example.com"
+      }
+    }
+  ],
+  "averageRating": 4.5,
+  "reviewCount": 10
+}
+```
+
+#### Add Review
+```http
+POST /api/reviews
+Authorization: Required
+Content-Type: application/json
+
+{
+  "movieId": "507f1f77bcf86cd799439011",
+  "rating": 5,
+  "comment": "Absolutely brilliant!"
+}
+
+Response: 201 Created
+{
+  "message": "Review added successfully"
+}
+```
+
+#### Update Review
+```http
+PUT /api/reviews/:reviewId
+Authorization: Required (Owner only)
+Content-Type: application/json
+
+{
+  "rating": 4,
+  "comment": "Updated review"
+}
+
+Response: 200 OK
+{
+  "message": "Review updated successfully"
+}
+```
+
+#### Delete Review
+```http
+DELETE /api/reviews/:reviewId
+Authorization: Required (Owner only)
+
+Response: 200 OK
+{
+  "message": "Review deleted successfully"
+}
+```
+
+---
+
+### User Endpoints
+
+#### Get All Users (Admin Only)
+```http
+GET /api/users
+Authorization: Required (Admin)
+
+Response: 200 OK
+[
+  {
+    "_id": "...",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "role": "user",
+    "createdAt": "2024-01-15T10:30:00Z"
+  }
+]
+```
+
+#### Update Profile
+```http
+PUT /api/users/profile
+Authorization: Required
+Content-Type: application/json
+
+{
+  "name": "John Smith",
+  "phone": "+9876543210",
+  "password": "newpassword"
+}
+
+Response: 200 OK
+{
+  "message": "Profile updated successfully"
+}
+```
+
+#### Delete User (Admin Only)
+```http
+DELETE /api/users/:id
+Authorization: Required (Admin)
+
+Response: 200 OK
+{
+  "message": "User deleted successfully"
+}
+```
+
+---
+
+## Security Implementation
+
+### Authentication
+- **Session-based authentication** using `express-session`
+- Sessions stored in MongoDB via `connect-mongo`
+- Session IDs transmitted via secure cookies
+
+### Password Security
+- **bcrypt hashing** with salt rounds (10)
+- Passwords never stored in plain text
+- Generic error messages to prevent user enumeration
+
+### Cookie Security
+```javascript
+cookie: {
+    httpOnly: true,    // Prevents XSS attacks
+    secure: true,      // HTTPS only (production)
+    maxAge: 86400000   // 24 hours
+}
+```
+
+- **HttpOnly**: Prevents JavaScript access to cookies
+- **Secure**: Cookies only sent over HTTPS
+- **SameSite**: CSRF protection (default: Lax)
+
+### Authorization Middleware
+
+#### `isAuthenticated` - Protects user-specific routes
+```javascript
+const isAuthenticated = (req, res, next) => {
+    if (req.session && req.session.userId) {
+        return next();
+    }
+    return res.status(401).json({ error: 'Unauthorized access' });
+};
+```
+
+#### `isAdmin` - Protects admin-only routes
+```javascript
+const isAdmin = (req, res, next) => {
+    if (req.session && req.session.role === 'admin') {
+        return next();
+    }
+    return res.status(403).json({ error: 'Admin privileges required' });
+};
+```
+
+### Input Validation
+- Email format validation using regex
+- Password minimum length (6 characters)
+- Name validation (2-50 characters, must contain letters)
+- Phone number validation (10-15 digits)
+- MongoDB ObjectId validation
+- Year range validation (1800-2030)
+- Rating range validation (0-10)
+
+### Error Handling
+- Proper HTTP status codes
+- Safe error messages (no sensitive information leaked)
+- Try-catch blocks on all async operations
+- Validation errors returned with field-specific messages
+
+---
+
+## Database Design
+
+### Collections
+
+#### 1. **users**
+```javascript
+{
+  _id: ObjectId,
+  name: String,              // Required, 2-50 chars
+  email: String,             // Required, unique, valid email
+  phone: String,             // Optional, 10-15 digits
+  password: String,          // Required, bcrypt hashed
+  role: String,              // "user" or "admin"
+  createdAt: Date
+}
+```
+
+#### 2. **movies**
+```javascript
+{
+  _id: ObjectId,
+  title: String,             // Required
+  genre: String,             // Required
+  year: Number,              // Required, 1800-2030
+  rating: Number,            // Optional, 0-10
+  director: String,          // Optional
+  description: String,       // Optional
+  posterUrl: String,         // Optional, image URL
+  trailerUrl: String,        // Optional, YouTube URL
+  movieLink: String,         // Optional, watch link (hidden if not logged in)
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+#### 3. **watchlist**
+```javascript
+{
+  _id: ObjectId,
+  userId: ObjectId,          // Ref: users._id
+  movieId: ObjectId,         // Ref: movies._id
+  addedAt: Date
+}
+```
+
+#### 4. **reviews**
+```javascript
+{
+  _id: ObjectId,
+  userId: ObjectId,          // Ref: users._id
+  movieId: ObjectId,         // Ref: movies._id
+  rating: Number,            // Required, 1-5
+  comment: String,           // Optional
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+### Relationships
+```
+users (1) ──────< (N) watchlist (N) >────── (1) movies
+users (1) ──────< (N) reviews   (N) >────── (1) movies
+```
+
+### Indexes (Recommended)
+```javascript
+// Unique email for users
+db.users.createIndex({ email: 1 }, { unique: true });
+
+// Movie search optimization
+db.movies.createIndex({ title: "text" });
+db.movies.createIndex({ genre: 1, year: -1 });
+
+// Watchlist composite index
+db.watchlist.createIndex({ userId: 1, movieId: 1 }, { unique: true });
+
+// Reviews composite index
+db.reviews.createIndex({ userId: 1, movieId: 1 }, { unique: true });
+db.reviews.createIndex({ movieId: 1, createdAt: -1 });
+```
+
+---
+
+## Team Members
+
+- **Amina Dossan** - Backend routes (GET endpoints, filtering, sorting, projection)
+- **Nazerke Abdizhamal** - HTML pages and UI structure
+- **Yerassyl Alimbek** - Search functionality and page routing
+- **Almat Zhamsat** - Styling, layout, and responsive design
+
+
+#### 1. **Project Base**
+- Node.js + Express backend from Assignment 3 Part 2
+- MongoDB database
+- No removal of existing CRUD functionality
+- Deployed application with public URL
+
+#### 2. **Domain Data**
+- Main entity: `movies` (not generic "items")
+- 8+ meaningful fields per movie
+- 20+ realistic records in database
+- Logical data structure
+
+#### 3. **Production Web Interface**
+- All CRUD operations via Web UI
+- Data displayed in grid layout
+- CREATE via modal form
+- UPDATE via edit modal
+- DELETE with confirmation
+- Dynamic data loading from API
+
+#### 4. **Sessions-based Authentication**
+- Login via Web UI
+- Server creates session after login
+- Session ID stored in cookie
+- Session persists between requests
+
+#### 5. **Authentication & Authorization**
+- Middleware protection implemented
+- Write operations protected
+- Unauthorized users cannot modify data
+
+#### 6. **Cookies Security**
+- HttpOnly flag enabled
+- Secure flag in production
+- No sensitive data in cookies
+
+#### 7. **Password Security**
+- bcrypt hashing with 10 salt rounds
+- No plain-text storage
+- Generic error messages
+
+#### 8. **Validation & Error Handling**
+- Input validation on all endpoints
+- Correct HTTP status codes
+- Safe error handling
+
+#### 1. **Project Base**
+- Same project from Assignment 4
+- Node.js + Express
+- MongoDB
+- Modular structure (routes, middleware, database)
+
+#### 2. **Database Logic & Domain Data**
+- **Four collections**: users, movies, watchlist, reviews
+- **Realistic domain**: Movie library system
+- **Logical relations**: userId ↔ movieId
+- **Pagination**: Can be added (see recommendations below)
+
+#### 3. **Authentication**
+- Sessions-based authentication
+- Login/logout functionality
+- bcrypt password hashing
+
+#### 4. **Authorization & Roles**
+- **Two roles**: `user` and `admin`
+- **Role-based middleware**: `isAdmin` middleware
+- **Owner access**: Users modify only their own watchlist/reviews
+- **Admin permissions**: CRUD movies, delete users
+
+#### 5. **API Endpoint Security**
+- All write endpoints protected
+- No public update/delete operations
+- Validation and error handling
+
+#### 6. **Deployment & Environment**
+- Environment variables for secrets
+- No hardcoded secrets
+- Production-ready configuration
+
+---
+
+## Deployment
+
+### Deploying to Render/Railway/Heroku
+
+1. **Set Environment Variables**
+   ```
+   MONGO_URI=<your-mongodb-connection-string>
+   SESSION_SECRET=<random-strong-secret>
+   NODE_ENV=production
+   ```
+
+2. **Update `package.json`**
+   ```json
+   "scripts": {
+     "start": "node server.js",
+     "dev": "nodemon server.js"
+   }
+   ```
+
+3. **Push to Git**
+   ```bash
+   git add .
+   git commit -m "Ready for deployment"
+   git push origin main
+   ```
+
+4. **Deploy**
+   - Follow platform-specific instructions
+   - Ensure `NODE_ENV=production` is set
+
+---
+
+## Development
+
+### Running Locally
+```bash
+npm install
+npm run dev
+```
+
+### Environment Setup
+1. Create MongoDB Atlas cluster
+2. Get connection string
+3. Add to `.env` file
+4. Create admin user manually in database:
+
+```javascript
+// Run this in MongoDB shell or Compass
+db.users.insertOne({
+  name: "Admin User",
+  email: "admin@movielib.com",
+  password: "$2a$10$...", // bcrypt hash of "admin123"
+  role: "admin",
+  phone: "",
+  createdAt: new Date()
+});
+```
+
+### Testing
+- **Manual testing**: Use the Web UI
+- **API testing**: Use Postman or Thunder Client
+- **Auth testing**: Try accessing protected routes without login
+
+---
+
+## Future Enhancements
+
+### Planned Features
+- [ ] Pagination for large datasets
+- [ ] Advanced search with multiple filters
+- [ ] Movie recommendations based on watchlist
+- [ ] Social features (follow users, share lists)
+- [ ] Email verification
+- [ ] Password reset functionality
+- [ ] Movie API integration (TMDB, OMDB)
+- [ ] Export watchlist to CSV
+- [ ] Dark/Light theme toggle
+- [ ] Multi-language support
+
+### Pagination Implementation (Recommended)
+```javascript
+// Add to routes/movies.js
+router.get('/', async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 20;
+  const skip = (page - 1) * limit;
+
+  const movies = await collection
+    .find(filter)
+    .sort(sort)
+    .skip(skip)
+    .limit(limit)
+    .toArray();
+
+  const total = await collection.countDocuments(filter);
+
+  res.json({
+    data: movies,
+    pagination: {
+      page,
+      limit,
+      total,
+      pages: Math.ceil(total / limit)
+    }
+  });
+});
+```
+
+---
+
+
+## License
+This project is created for educational purposes as part of the Backend Web Development course.
