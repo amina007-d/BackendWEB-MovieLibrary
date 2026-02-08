@@ -1,11 +1,17 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const { connectDB } = require('./database/db');
+const { connectDB, mongoURI } = require('./database/db');
 const moviesRouter = require('./routes/movies');
+const authRouter = require('./routes/auth');
+const watchlistRouter = require('./routes/watchlist');
+const reviewsRouter = require('./routes/reviews');
+const usersRouter = require('./routes/users');
+const session = require('express-session');
+const { MongoStore } = require('connect-mongo');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Custom logger middleware (Nazerke's part)
 app.use((req, res, next) => {
@@ -18,6 +24,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Session Middleware with MongoDB store
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'secret_key_assignment4',
+  resave: false,
+  saveUninitialized: false,
+  store: new MongoStore({
+    mongoUrl: mongoURI,
+    touchAfter: 24 * 3600 // lazy session update
+  }),
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 1000 * 60 * 60 * 24 // 1 day
+  }
+}));
+
 // Home page route
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views/index.html'));
@@ -28,9 +50,25 @@ app.get('/about', (req, res) => {
   res.sendFile(path.join(__dirname, 'views/about.html'));
 });
 
+// Watchlist page
+app.get('/watchlist', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views/watchlist.html'));
+});
+
 // Contact page (GET)
 app.get('/contact', (req, res) => {
   res.sendFile(path.join(__dirname, 'views/contact.html'));
+});
+
+// Admin page
+const { isAdmin } = require('./middleware/admin'); // Import here or at top
+app.get('/admin', (req, res, next) => {
+  // Basic auth check for page load, actual data is protected by API
+  if (req.session && req.session.role === 'admin') {
+    res.sendFile(path.join(__dirname, 'views/admin.html'));
+  } else {
+    res.status(403).send('<h2>Access Denied</h2><a href="/">Go Home</a>');
+  }
 });
 
 // API info endpoint (Amina's part)
@@ -92,8 +130,13 @@ app.get('/search', (req, res) => {
   `);
 });
 
-// API Routes - Movies CRUD
+// API Routes
+app.use('/api/auth', authRouter);
 app.use('/api/movies', moviesRouter);
+app.use('/api/watchlist', watchlistRouter);
+app.use('/api/watchlist', watchlistRouter);
+app.use('/api/reviews', reviewsRouter);
+app.use('/api/users', usersRouter);
 
 // Global 404 handler for API routes
 app.use((req, res) => {
