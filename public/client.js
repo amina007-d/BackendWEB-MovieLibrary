@@ -226,7 +226,7 @@ function getMovieActions(movie) {
     // Watch button (for ALL users including admins, if link exists)
     if (movie.movieLink) {
         buttons += `
-            <a href="${movie.movieLink}" target="_blank" class="btn-watch" style="text-decoration: none; display: inline-flex; align-items: center; gap: 5px; padding: 0.5rem 1rem; background: #E50914; color: white; border-radius: 4px; font-weight: 600; font-size: 0.9rem;">
+            <a href="${movie.movieLink}" target="_blank" class="btn-watch">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polygon points="5 3 19 12 5 21 5 3"></polygon>
                 </svg>

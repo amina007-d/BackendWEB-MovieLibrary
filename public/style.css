@@ -403,6 +403,28 @@ select:focus {
   transform: translateY(-2px);
 }
 
+.btn-watch {
+  padding: 0.625rem 1.25rem;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  background: #451952;
+  color: #DFB682;
+}
+
+.btn-watch:hover {
+  background: #AF445A;
+  transform: translateY(-2px);
+  color: #DFB682;
+}
+
 /* ===== MODAL ===== */
 .modal {
   display: none;
