@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Watchlist - Movie Library</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <nav class="navbar">
+            <div class="nav-logo">MovieLib</div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/watchlist" class="active" id="watchlistLink">My Watchlist</a>
+                <a href="/admin" id="adminLink" class="hidden">Admin</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+            </div>
+            <div class="auth-controls">
+                <button id="loginBtn" class="btn-secondary">Login</button>
+                <button id="registerBtn" class="btn-primary">Register</button>
+                <button id="logoutBtn" class="btn-secondary hidden">Logout</button>
+            </div>
+        </nav>
+
+        <header class="hero" style="text-align: left; padding: 1rem 0;">
+            <h1>My Watchlist</h1>
+            <p class="subtitle" style="margin: 0; max-width: 100%;">
+                Your curated list of movies to watch.
+            </p>
+        </header>
+
+        <main>
+            <div id="watchlistPageGrid" class="movie-grid">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Loading watchlist...</p>
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <!-- Auth Modals (Reused for consistent behavior) -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="authModalTitle">Login</h2>
+                <button id="authCancelBtn" class="close-btn">×</button>
+            </div>
+
+            <div class="auth-tabs">
+                <button id="tabLogin" class="tab active">Login</button>
+                <button id="tabRegister" class="tab">Register</button>
+            </div>
+
+            <form id="authForm">
+                <div class="field">
+                    <label for="authEmail">Email</label>
+                    <input type="email" id="authEmail" name="email" required placeholder="email@example.com">
+                    <div class="field-error" id="authEmailError"></div>
+                </div>
+                <div class="field">
+                    <label for="authPassword">Password</label>
+                    <input type="password" id="authPassword" name="password" required placeholder="******">
+                    <div class="field-error" id="authPasswordError"></div>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary" id="authSubmitBtn">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="movieModal" class="modal">
+        <!-- Edit Movie Modal Reuse if needed, or simple message that editing happens on home -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Edit Movie</h2>
+                <button id="cancelBtn" class="close-btn">×</button>
+            </div>
+            <!-- Reuse form structure for consistency if we support editing here, otherwise we can simplify -->
+            <form id="movieForm">
+                <div class="form-row">
+                    <div class="field">
+                        <label for="title">Title</label>
+                        <input type="text" id="title" name="title" required placeholder="e.g., The Matrix">
+                    </div>
+                    <div class="field">
+                        <label for="genre">Genre</label>
+                        <select id="genre" name="genre" required>
+                            <option value="">Select Genre</option>
+                            <option value="Action">Action</option>
+                            <option value="Drama">Drama</option>
+                            <option value="Comedy">Comedy</option>
+                            <option value="Sci-Fi">Sci-Fi</option>
+                            <option value="Horror">Horror</option>
+                            <option value="Romance">Romance</option>
+                            <option value="Thriller">Thriller</option>
+                            <option value="Adventure">Adventure</option>
+                            <option value="Animation">Animation</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="field">
+                        <label for="year">Year</label>
+                        <input type="number" id="year" name="year" required min="1800" max="2030">
+                    </div>
+                    <div class="field">
+                        <label for="rating">Rating (0-10)</label>
+                        <input type="number" id="rating" name="rating" min="0" max="10" step="0.1">
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="director">Director</label>
+                    <input type="text" id="director" name="director">
+                </div>
+                <div class="field">
+                    <label for="posterUrl">Poster URL</label>
+                    <input type="url" id="posterUrl" name="posterUrl">
+                </div>
+                <div class="field">
+                    <label for="trailerUrl">Trailer URL (YouTube)</label>
+                    <input type="url" id="trailerUrl" name="trailerUrl">
+                </div>
+                <div class="field">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="4"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancelBtn" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Movie</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="/client.js"></script>
+</body>
+
+</html>
