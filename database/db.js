@@ -26,4 +26,4 @@ function getDB() {
   return db;
 }
 
-module.exports = { connectDB, getDB, ObjectId };
+module.exports = { connectDB, getDB, ObjectId, mongoURI: url };
