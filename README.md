@@ -214,7 +214,7 @@ NODE_ENV=development
 
 ### Hosted URL
 
-https://movielibrary-3w4z.onrender.com
+https://backendweb-movielibrary.onrender.com
 
 ### Base URL
 ```
