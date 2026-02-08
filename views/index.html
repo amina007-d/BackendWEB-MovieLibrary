@@ -19,8 +19,26 @@
       <div class="nav-logo">MovieLib</div>
       <div class="nav-links">
         <a href="/" class="active">Home</a>
+        <a href="/watchlist" id="watchlistLink" class="hidden">My Watchlist</a>
+        <a href="/admin" id="adminLink" class="hidden">Admin</a>
         <a href="/about">About</a>
         <a href="/contact">Contact</a>
+      </div>
+      <div class="auth-controls">
+        <button id="loginBtn" class="btn-secondary">Login</button>
+        <button id="registerBtn" class="btn-primary">Register</button>
+
+        <div id="userProfileConfig" class="hidden" style="display: flex; align-items: center; gap: 10px;">
+          <span id="userNameDisplay"
+            style="cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 5px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span id="userNameText">User</span>
+          </span>
+          <button id="logoutBtn" class="btn-secondary">Logout</button>
+        </div>
       </div>
     </nav>
 
@@ -40,7 +58,8 @@
 
     <section class="controls-section">
       <div class="search-bar">
-        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2">
           <circle cx="11" cy="11" r="8"></circle>
           <path d="m21 21-4.35-4.35"></path>
         </svg>
@@ -103,12 +122,13 @@
   </div>
 
   <div id="movieModal" class="modal">
+    <!-- ... existing modal content ... -->
     <div class="modal-content">
       <div class="modal-header">
         <h2 id="modalTitle">Add New Movie</h2>
         <button id="cancelBtn" class="close-btn">×</button>
       </div>
-      
+
       <form id="movieForm">
         <div class="form-row">
           <div class="field">
@@ -161,13 +181,99 @@
         </div>
 
         <div class="field">
+          <label for="movieLink">Movie Link (Watch URL)</label>
+          <input type="url" id="movieLink" name="movieLink" placeholder="https://example.com/movie.mp4">
+        </div>
+
+        <div class="field">
           <label for="description">Description</label>
-          <textarea id="description" name="description" rows="4" placeholder="Brief description of the movie..."></textarea>
+          <textarea id="description" name="description" rows="4"
+            placeholder="Brief description of the movie..."></textarea>
         </div>
 
         <div class="modal-actions">
           <button type="button" id="cancelBtn" class="btn-secondary">Cancel</button>
           <button type="submit" class="btn-primary">Save Movie</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="authModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="authModalTitle">Login</h2>
+        <button id="authCancelBtn" class="close-btn">×</button>
+      </div>
+
+      <div class="auth-tabs">
+        <button id="tabLogin" class="tab active">Login</button>
+        <button id="tabRegister" class="tab">Register</button>
+      </div>
+
+      <form id="authForm">
+        <div class="field">
+          <label for="authName">Name</label>
+          <input type="text" id="authName" name="name" placeholder="John Doe">
+          <div class="field-error" id="authNameError"></div>
+        </div>
+        <div class="field">
+          <label for="authPhone">Phone</label>
+          <input type="tel" id="authPhone" name="phone" placeholder="+1234567890">
+          <div class="field-error" id="authPhoneError"></div>
+        </div>
+        <div class="field">
+          <label for="authEmail">Email</label>
+          <input type="email" id="authEmail" name="email" required placeholder="email@example.com">
+          <div class="field-error" id="authEmailError"></div>
+        </div>
+        <div class="field">
+          <label for="authPassword">Password</label>
+          <input type="password" id="authPassword" name="password" required placeholder="******">
+          <div class="field-error" id="authPasswordError"></div>
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="btn-primary" id="authSubmitBtn">Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="watchlistModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>My Watchlist</h2>
+        <button id="closeWatchlistBtn" class="close-btn">×</button>
+      </div>
+      <div id="watchlistGrid" class="movie-grid"
+        style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; padding: 1rem;">
+        <!-- Watchlist items will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div id="profileModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Profile</h2>
+        <button id="closeProfileBtn" class="close-btn">×</button>
+      </div>
+      <form id="profileForm">
+        <div class="field">
+          <label for="profileName">Name</label>
+          <input type="text" id="profileName" name="name" placeholder="Your Name">
+        </div>
+        <div class="field">
+          <label for="profilePhone">Phone</label>
+          <input type="tel" id="profilePhone" name="phone" placeholder="Your Phone">
+        </div>
+        <div class="field">
+          <label for="profilePassword">New Password (leave blank to keep current)</label>
+          <input type="password" id="profilePassword" name="password" placeholder="New Password">
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="btn-primary">Save Changes</button>
         </div>
       </form>
     </div>
