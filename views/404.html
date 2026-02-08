@@ -1,18 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404</title>
   <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 </head>
+
 <body>
 
   <div class="layout">
 
     <nav class="navbar">
-      <a href="/">Home</a>
-      <a href="/about">About</a>
-      <a href="/contact">Contact</a>
+      <div class="nav-logo">MovieLib</div>
+      <div class="nav-links">
+        <a href="/" class="active">Home</a>
+        <a href="/watchlist" id="watchlistLink" class="hidden">My Watchlist</a>
+        <a href="/admin" id="adminLink" class="hidden">Admin</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+      </div>
+      <div class="auth-controls">
+        <button id="loginBtn" class="btn-secondary">Login</button>
+        <button id="registerBtn" class="btn-primary">Register</button>
+        <button id="logoutBtn" class="btn-secondary hidden">Logout</button>
+      </div>
     </nav>
 
     <section style="text-align: center;">
@@ -27,5 +44,63 @@
 
   </div>
 
+  <div id="toast" class="toast"></div>
+
+  <div id="authModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="authModalTitle">Login</h2>
+        <button id="authCancelBtn" class="close-btn">×</button>
+      </div>
+
+      <div class="auth-tabs">
+        <button id="tabLogin" class="tab active">Login</button>
+        <button id="tabRegister" class="tab">Register</button>
+      </div>
+
+      <form id="authForm">
+        <div class="field">
+          <label for="authName">Name</label>
+          <input type="text" id="authName" name="name" placeholder="John Doe">
+          <div class="field-error" id="authNameError"></div>
+        </div>
+        <div class="field">
+          <label for="authPhone">Phone</label>
+          <input type="tel" id="authPhone" name="phone" placeholder="+1234567890">
+          <div class="field-error" id="authPhoneError"></div>
+        </div>
+        <div class="field">
+          <label for="authEmail">Email</label>
+          <input type="email" id="authEmail" name="email" required placeholder="email@example.com">
+          <div class="field-error" id="authEmailError"></div>
+        </div>
+        <div class="field">
+          <label for="authPassword">Password</label>
+          <input type="password" id="authPassword" name="password" required placeholder="******">
+          <div class="field-error" id="authPasswordError"></div>
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="btn-primary" id="authSubmitBtn">Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="watchlistModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>My Watchlist</h2>
+        <button id="closeWatchlistBtn" class="close-btn">×</button>
+      </div>
+      <div id="watchlistGrid" class="movie-grid"
+        style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; padding: 1rem;">
+        <!-- Watchlist items will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <script src="/client.js"></script>
+
 </body>
+
 </html>
