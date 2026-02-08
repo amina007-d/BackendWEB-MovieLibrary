@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { getDB, ObjectId } = require('../database/db');
+const { isAuthenticated } = require('../middleware/auth');
+const { isAdmin } = require('../middleware/admin');
 
 // GET all movies with filtering, sorting, and projection
 // Amina's part
@@ -29,6 +31,15 @@ router.get('/', async (req, res) => {
       fields.forEach(field => {
         projection[field.trim()] = 1;
       });
+    }
+
+    // Hide movieLink if not logged in
+    if (!req.session.userId) {
+      if (Object.keys(projection).length > 0) {
+        delete projection.movieLink;
+      } else {
+        projection.movieLink = 0;
+      }
     }
 
     // Build sort object (default: sort by title ascending)
@@ -72,6 +83,15 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Movie not found' });
     }
 
+    // Hide movieLink if not logged in
+    if (!req.session.userId && movie.movieLink) {
+      delete movie.movieLink;
+    }
+
+    if (!movie) {
+      return res.status(404).json({ error: 'Movie not found' });
+    }
+
     res.status(200).json(movie);
   } catch (err) {
     console.error('Error fetching movie:', err);
@@ -81,9 +101,11 @@ router.get('/:id', async (req, res) => {
 
 // CREATE movie
 // Yerassyl's part
-router.post('/', async (req, res) => {
+// CREATE movie
+// Use isAdmin
+router.post('/', isAdmin, async (req, res) => {
   try {
-    const { title, genre, year, rating, director, description, posterUrl, trailerUrl } = req.body;
+    const { title, genre, year, rating, director, description, posterUrl, trailerUrl, movieLink } = req.body;
 
     // Validation
     if (!title || !genre || !year) {
@@ -110,6 +132,9 @@ router.post('/', async (req, res) => {
       description: description || null,
       posterUrl: posterUrl || null,
       trailerUrl: trailerUrl || null,
+      posterUrl: posterUrl || null,
+      trailerUrl: trailerUrl || null,
+      movieLink: movieLink || null,
       createdAt: new Date()
     };
 
@@ -130,9 +155,11 @@ router.post('/', async (req, res) => {
 
 // UPDATE movie
 // Nazerke's part
-router.put('/:id', async (req, res) => {
+// UPDATE movie
+// Use isAdmin
+router.put('/:id', isAdmin, async (req, res) => {
   try {
-    const { title, genre, year, rating, director, description, posterUrl, trailerUrl } = req.body;
+    const { title, genre, year, rating, director, description, posterUrl, trailerUrl, movieLink } = req.body;
 
     // Validate ObjectId
     if (!ObjectId.isValid(req.params.id)) {
@@ -164,6 +191,9 @@ router.put('/:id', async (req, res) => {
       description: description || null,
       posterUrl: posterUrl || null,
       trailerUrl: trailerUrl || null,
+      posterUrl: posterUrl || null,
+      trailerUrl: trailerUrl || null,
+      movieLink: movieLink || null,
       updatedAt: new Date()
     };
 
@@ -191,7 +221,9 @@ router.put('/:id', async (req, res) => {
 
 // DELETE movie
 // Almat's part
-router.delete('/:id', async (req, res) => {
+// DELETE movie
+// Use isAdmin
+router.delete('/:id', isAdmin, async (req, res) => {
   try {
     // Validate ObjectId
     if (!ObjectId.isValid(req.params.id)) {
